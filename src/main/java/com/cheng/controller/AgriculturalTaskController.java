@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping
 public class AgriculturalTaskController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class AgriculturalTaskController {
     }
 
     // 新增接口：按方案 ID 获取格式化后的任务数据
-    @GetMapping("/formatted/{schemeId}")
+    @GetMapping("/scheme/{schemeId}")
     public SchemeResponse getFormattedTasksBySchemeId(@PathVariable Integer schemeId) {
         return taskService.getFormattedTasksBySchemeId(schemeId);
     }
