@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class AgriculturalTaskService {
     public AgriculturalTask addTask(AgriculturalTask task) {
         return taskDAO.save(task); // 假设 DAO 层使用了 JPA 的 save 方法
     }
+    // 新增方法：获取格式化后的任务数据
     // 新增方法：获取格式化后的任务数据
     public SchemeResponse getFormattedTasksBySchemeId(Integer schemeId) {
         // 获取所有与指定方案相关的任务
@@ -66,8 +68,22 @@ public class AgriculturalTaskService {
             }
         }
 
-        // 将分组结果加入响应对象
-        response.setAgriculturalTasks(new ArrayList<>(stageMap.values()));
+        // 将分组结果加入响应对象，并按 startDate 排序
+        List<StageTask> sortedStageTasks = new ArrayList<>(stageMap.values());
+        sortedStageTasks.sort((t1, t2) -> {
+            try {
+                // 使用日期格式化器解析日期字符串
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date date1 = dateFormat.parse(t1.getStartDate());
+                java.util.Date date2 = dateFormat.parse(t2.getStartDate());
+                return date1.compareTo(date2);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return 0; // 如果解析失败，默认不改变顺序
+            }
+        });
+
+        response.setAgriculturalTasks(sortedStageTasks);
 
         return response;
     }
