@@ -1,6 +1,8 @@
 package com.cheng.controller;
 
 import com.cheng.model.AgriculturalTask;
+import com.cheng.model.EnvironmentData;
+import com.cheng.model.EnvironmentDataResponse;
 import com.cheng.model.SchemeResponse;
 import com.cheng.service.AgriculturalTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +33,10 @@ public class AgriculturalTaskController {
     @PostMapping
     public AgriculturalTask addTask(@RequestBody AgriculturalTask task) {
         return taskService.addTask(task);
+    }
+    // 新增接口：获取实时环境数据和近期农事计划
+    @GetMapping("/environment-plan")
+    public EnvironmentDataResponse getEnvironmentDataAndRecentPlan() {
+        return taskService.getEnvironmentDataAndRecentPlan();
     }
 }

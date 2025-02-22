@@ -71,4 +71,22 @@ public class AgriculturalTaskService {
 
         return response;
     }
+    // 新增方法：获取实时环境数据和近期农事计划
+    public EnvironmentDataResponse getEnvironmentDataAndRecentPlan() {
+        EnvironmentDataResponse response = new EnvironmentDataResponse();
+
+        // 查询最新的环境数据
+        EnvironmentData envData = taskDAO.findLatestEnvironmentData();
+        if (envData != null) {
+            response.setTemperature(envData.getTemperature());
+            response.setHumidity(envData.getHumidity());
+            response.setSoilMoisture(envData.getSoilMoisture());
+        }
+
+        // 查询所有近期农事计划
+        List<String> recentPlans = taskDAO.findAllRecentPlans();
+        response.setRecentPlans(recentPlans);
+
+        return response;
+    }
 }
